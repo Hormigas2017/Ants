@@ -11,22 +11,18 @@ public class Generators : MonoBehaviour
     public static event MouseFoundGenerator ArchersGen;
     public static event MouseFoundGenerator WarriorsGen;
 
-    bool boolWG = false, boolAG = false, boolWaG = false;
+    public bool boolWg = false, boolAg = false, boolWag = false;
 
-    public Transform canvasWG, canvasAG, canvasWaG;
-
-    // Use this for initialization
     void Start ()
     {
         
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
         FindWorkersGen();
         FindArchersGen();
         FindWarriorsGen();
-        Gen();
     }
 
     public void FindWorkersGen()
@@ -36,8 +32,12 @@ public class Generators : MonoBehaviour
             RaycastHit hitInfo = new RaycastHit();
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && hitInfo.transform.tag == "WorkersGen")
             {
-                boolWG = true;
-                Gen();
+                boolWg = true;
+                WorkersGen();
+            }
+            else
+            {
+                boolWg = false;
             }
         }
     }
@@ -49,8 +49,12 @@ public class Generators : MonoBehaviour
             RaycastHit hitInfo = new RaycastHit();
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && hitInfo.transform.tag == "ArchersGen")
             {
-                boolAG = true;
-                Gen();
+                boolAg = true;
+                ArchersGen();
+            }
+            else
+            {
+                boolAg = false;
             }
         }
     }
@@ -62,25 +66,13 @@ public class Generators : MonoBehaviour
             RaycastHit hitInfo = new RaycastHit();
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && hitInfo.transform.tag == "WarriorsGen")
             {
-                boolWaG = true;
-                Gen();
+                boolWag = true;
+                WarriorsGen();
             }
-        }
-    }
-
-    public void Gen()
-    {
-        if (boolWG == true)
-        {
-            canvasWG.gameObject.SetActive(true);
-        }
-        if (boolAG == true)
-        {
-            canvasAG.gameObject.SetActive(true);
-        }
-        if (boolWaG == true)
-        {
-            canvasWaG.gameObject.SetActive(true);
+            else
+            {
+                boolWag = false;
+            }
         }
     }
 }

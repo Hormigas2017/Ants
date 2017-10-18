@@ -5,8 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - WorkersGen
-  - WarriorsGenerator
-  - ArchersGenerator
+  - ArchersGen
+  - WarriorsGen
   layers:
   - Default
   - TransparentFX
