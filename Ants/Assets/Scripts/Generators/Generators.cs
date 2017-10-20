@@ -52,10 +52,12 @@ public class Generators : MonoBehaviour
                 boolAg = true;
                 ArchersGen();
             }
-            else
+            /*
+              else
             {
                 boolAg = false;
             }
+            */
         }
     }
 
