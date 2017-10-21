@@ -5,40 +5,85 @@ using UnityEngine.UI;
 
 public class CreateButton : MonoBehaviour
 {
-    Transform mTrans;
-    Transform mCanvas;
-
-    Image antAG;
-
-    float t = 0.0f;
     public Image[] imagesArray = new Image[10];
-
+    float tAG = 30f;
+    float tWaG = 30f;
+    float tWG = 30f;
     // Use this for initialization
     void Start ()
     {
-        antAG = GameObject.Find("AntAG").GetComponent<Image>();
-        mTrans = GameObject.Find("AntAG").GetComponent<Transform>();
-        mCanvas = GameObject.Find("WhiteBackGround").GetComponent<Transform>();
-    }
-	
-	// Update is called once per frame
-	void Update ()
-    {
-        t += Time.deltaTime;
+        
     }
 
-    public void NumAntsAG()
+    // Update is called once per frame
+    void Update()
+    {
+        tAG -= Time.deltaTime;
+        tWaG -= Time.deltaTime;
+        tWG -= Time.deltaTime;
+        ArchersTime();
+        WarriorsTime();
+        WorkersTime();
+        Debug.Log(tWG);
+    }
+
+    public void NumAnts()
     {
         for (int i = 0; i < imagesArray.Length; i++)
         {
-            if (t > 1)
+            if (imagesArray[i].gameObject.activeInHierarchy == false)
             {
-                float xy = 5f;
-                Vector3 changePos = new Vector3(xy, xy, 0);
-                imagesArray[i] = Instantiate(antAG, mCanvas.position, Quaternion.identity);
-                t = 0f;
+                imagesArray[i].gameObject.SetActive(true);
+                break;
             }
-            i++;
+        }
+    }
+
+    public void ArchersTime()
+    {
+        for (int i = 0; i < imagesArray.Length; i++)
+        {
+            if (tAG < 0f)
+            {
+                if (imagesArray[i].gameObject.activeInHierarchy == true)
+                {
+                    imagesArray[i].gameObject.SetActive(false);
+                    tAG = 30;
+                    break;
+                }
+            }
+        }
+    }
+
+    public void WarriorsTime()
+    {
+        for (int i = 0; i < imagesArray.Length; i++)
+        {
+            if (tWaG < 10f)
+            {
+                if (imagesArray[i].gameObject.activeInHierarchy == true)
+                {
+                    imagesArray[i].gameObject.SetActive(false);
+                    tWaG = 30;
+                    break;
+                }
+            }
+        }
+    }
+
+    public void WorkersTime()
+    {
+        for (int i = 0; i < imagesArray.Length; i++)
+        {
+            if (tWG < 20f)
+            {
+                if (imagesArray[i].gameObject.activeInHierarchy == true)
+                {
+                    imagesArray[i].gameObject.SetActive(false);
+                    tWG = 30;
+                    break;
+                }
+            }
         }
     }
 }

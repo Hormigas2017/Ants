@@ -35,12 +35,8 @@ public class CanvasEvents : MonoBehaviour {
         }
         else
         {
-            if (canvasWG.gameObject.activeInHierarchy == true)
-            {
-                canvasWG.gameObject.SetActive(false);
-            }
+            canvasWG.gameObject.SetActive(false);
         }
-
     }
 
     public void CanvasAG()
@@ -54,10 +50,7 @@ public class CanvasEvents : MonoBehaviour {
         }
         else
         {
-            if (canvasAG.gameObject.activeInHierarchy == true)
-            {
-                canvasAG.gameObject.SetActive(false);
-            }
+            canvasAG.gameObject.SetActive(false);
         }
     }
 
@@ -72,10 +65,7 @@ public class CanvasEvents : MonoBehaviour {
         }
         else
         {
-            if (canvasWaG.gameObject.activeInHierarchy == true)
-            {
-                canvasWaG.gameObject.SetActive(false);
-            }
+            canvasWaG.gameObject.SetActive(false);
         }
     }
 }

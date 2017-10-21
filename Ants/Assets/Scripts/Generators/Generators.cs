@@ -52,13 +52,12 @@ public class Generators : MonoBehaviour
                 boolAg = true;
                 ArchersGen();
             }
-            /*
-              else
+            else
             {
                 boolAg = false;
             }
-            */
         }
+       
     }
 
     public void FindWarriorsGen()
@@ -76,5 +75,6 @@ public class Generators : MonoBehaviour
                 boolWag = false;
             }
         }
+        
     }
 }
