@@ -14,24 +14,24 @@ public class CameraController : MonoBehaviour
 
         if(Input.mousePosition.y >= Screen.height - panBorderThickness)
         {
-            position.z += panSpeed * Time.deltaTime;
+            transform.position += transform.forward * panSpeed * Time.deltaTime;
         }
         if (Input.mousePosition.y <= panBorderThickness)
         {
-            position.z -= panSpeed * Time.deltaTime;
+            transform.position -= transform.forward * panSpeed * Time.deltaTime;
         }
         if (Input.mousePosition.x >= Screen.width - panBorderThickness)
         {
-            position.x += panSpeed * Time.deltaTime;
+            transform.position += transform.right * panSpeed * Time.deltaTime;
         }
         if (Input.mousePosition.x <= panBorderThickness)
         {
-            position.x -= panSpeed * Time.deltaTime;
+            transform.position -= transform.right * panSpeed * Time.deltaTime;
         }
 
         //position.x = Mathf.Clamp();
 
-        transform.position = position;
+        //transform.position = position;
 
 
     }
