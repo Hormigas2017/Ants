@@ -9,22 +9,29 @@ public class CreateButton : MonoBehaviour
     float tAG = 30f;
     float tWaG = 30f;
     float tWG = 30f;
+
+    CanvasEvents mCanvasE;
+    Generators mGens;
+
+    AudioSource spawnWarriors;
+    AudioSource spawnArchers;
+
     // Use this for initialization
     void Start ()
     {
-        
+        mCanvasE = GetComponent<CanvasEvents>();
+        mGens = GetComponent<Generators>();
+
+        spawnWarriors = GameObject.Find("SpawnWaA").GetComponent<AudioSource>();
+        spawnArchers = GameObject.Find("SpawnAA").GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        tAG -= Time.deltaTime;
-        tWaG -= Time.deltaTime;
-        tWG -= Time.deltaTime;
         ArchersTime();
         WarriorsTime();
         WorkersTime();
-        Debug.Log(tWG);
     }
 
     public void NumAnts()
@@ -41,6 +48,7 @@ public class CreateButton : MonoBehaviour
 
     public void ArchersTime()
     {
+        tAG -= Time.deltaTime;
         for (int i = 0; i < imagesArray.Length; i++)
         {
             if (tAG < 0f)
@@ -57,6 +65,8 @@ public class CreateButton : MonoBehaviour
 
     public void WarriorsTime()
     {
+        tWaG -= Time.deltaTime;
+        Debug.Log(tWaG);
         for (int i = 0; i < imagesArray.Length; i++)
         {
             if (tWaG < 10f)
@@ -64,7 +74,10 @@ public class CreateButton : MonoBehaviour
                 if (imagesArray[i].gameObject.activeInHierarchy == true)
                 {
                     imagesArray[i].gameObject.SetActive(false);
-                    tWaG = 30;
+
+                    spawnWarriors.Play();//Audio source
+
+                    tWaG = 30f;
                     break;
                 }
             }
@@ -73,6 +86,7 @@ public class CreateButton : MonoBehaviour
 
     public void WorkersTime()
     {
+        tWG -= Time.deltaTime;
         for (int i = 0; i < imagesArray.Length; i++)
         {
             if (tWG < 20f)
@@ -80,10 +94,11 @@ public class CreateButton : MonoBehaviour
                 if (imagesArray[i].gameObject.activeInHierarchy == true)
                 {
                     imagesArray[i].gameObject.SetActive(false);
-                    tWG = 30;
+                    tWG = 30f;
                     break;
                 }
             }
         }
     }
+
 }

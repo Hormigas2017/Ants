@@ -35,10 +35,10 @@ public class Generators : MonoBehaviour
                 boolWg = true;
                 WorkersGen();
             }
-            else
+            /*else
             {
-                boolWg = false;
-            }
+              boolWg = false;
+            }*/
         }
     }
 
@@ -52,10 +52,10 @@ public class Generators : MonoBehaviour
                 boolAg = true;
                 ArchersGen();
             }
-            else
+            /*else
             {
                 boolAg = false;
-            }
+            }*/
         }
        
     }
@@ -70,10 +70,10 @@ public class Generators : MonoBehaviour
                 boolWag = true;
                 WarriorsGen();
             }
-            else
+           /* else
             {
                 boolWag = false;
-            }
+            }*/
         }
         
     }
