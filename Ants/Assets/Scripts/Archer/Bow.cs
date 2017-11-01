@@ -8,7 +8,7 @@ public class Bow : MonoBehaviour
     Transform mTransform;
     bool inRange = false;
     float coolDown = 0;
-    float minRange = 20, maxRange = 300, minMagnitude = 350, maxMagnitude = 725;
+    float minRange = 20, maxRange = 300, maxMagnitude = 725;
 
     AudioSource shotSound;
 
@@ -63,11 +63,7 @@ public class Bow : MonoBehaviour
             Vector3 direction = heading / distance; // This is now the normalized direction.
             Vector3 par = new Vector3(0, 0.4f, 0);
 
-            float m = (maxMagnitude - minMagnitude) / (maxRange - minRange);
-            float b = 4525 / 14;
-            float r = Random.Range(minRange, maxRange);
-
-            float magnitude = m * r + b;
+            float magnitude = maxMagnitude * distance;
 
             if (inRange == true && coolDown >= 2 && enemy.activeInHierarchy == true)
             {
