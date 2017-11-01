@@ -21,7 +21,7 @@ public class SurvivalTime : MonoBehaviour
     void Update()
     {
         secs += Time.deltaTime;
-        tSecs.text = " " + secs.ToString("0");
+        tSecs.text = " " + secs.ToString("00s");
 
         if (secs > 59)
         {
