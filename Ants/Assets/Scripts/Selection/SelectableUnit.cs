@@ -11,12 +11,12 @@ public class SelectableUnit : MonoBehaviour
         return selected;
     }
 
-    public void SelectUnits()
+    public void SelectUnit()
     {
         selected = true;
     }
 
-    public void DeselectUnits()
+    public void DeselectUnit()
     {
         selected = false;
     }

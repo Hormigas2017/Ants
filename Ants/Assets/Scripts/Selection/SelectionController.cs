@@ -23,6 +23,67 @@ public class SelectionController : MonoBehaviour, IBeginDragHandler, IDragHandle
         selectedUnits = new List<SelectableUnit>();
     }
 
+    private void Update()
+    {
+        SimpleSelection();
+    }
+
+    private void SimpleSelection()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            if (!Input.GetKey(KeyCode.LeftControl))
+            {
+                Deselect();
+            }
+            MakeSimpleSelection();
+        }
+    }
+
+    private void MakeSimpleSelection()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        SelectableUnit selectedUnit = null;
+        foreach (RaycastHit hit in hits)
+        {
+            selectedUnit = hit.collider.gameObject.GetComponentInParent<SelectableUnit>();
+
+            if (selectedUnit != null)
+            {
+                break;
+            }
+        }
+
+        if (selectedUnit != null)
+        {
+            //we select something
+            if (!selectedUnits.Contains(selectedUnit))
+            {
+                selectedUnits.Add(selectedUnit);
+            }
+        }
+        else
+        {
+            Deselect();
+        }
+
+        foreach (SelectableUnit unit in selectedUnits)
+        {
+            unit.SelectUnit();
+        }
+    }
+
+    private void Deselect()
+    {
+        foreach (SelectableUnit unit in selectedUnits)
+        {
+            unit.DeselectUnit();
+        }
+        selectedUnits.Clear();
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         selectionBoxImage.gameObject.SetActive(true);
@@ -60,6 +121,15 @@ public class SelectionController : MonoBehaviour, IBeginDragHandler, IDragHandle
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        throw new NotImplementedException();
+        selectionBoxImage.gameObject.SetActive(false);
+
+        if (OnBoxSelection != null)
+        {
+            OnBoxSelection();
+        }
+        foreach (SelectableUnit unit in selectedUnits)
+        {
+            unit.SelectUnit();
+        }
     }
 }
