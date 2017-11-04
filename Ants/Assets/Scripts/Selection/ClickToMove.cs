@@ -18,14 +18,14 @@ public class ClickToMove : MonoBehaviour
     {
         navAgent = GetComponent<NavMeshAgent>();
         selectable = GetComponent<SelectableUnit>();
-        anim = GetComponentInChildren<Animator>();
+        anim = GetComponent<Animator>();
     }
 
     private void Update()
     {
         //anim.SetFloat("Velocity", navAgent.velocity.sqrMagnitude);
 
-        if (Input.GetButtonDown(clickToMove) && selectable.IsSelected())
+        if (Input.GetButtonDown(clickToMove))
         {
             MoveTowardsClick();
         }
@@ -42,7 +42,6 @@ public class ClickToMove : MonoBehaviour
             {
                 targetPos = hit.point;
             }
-
             navAgent.SetDestination(targetPos);
         }
     }
