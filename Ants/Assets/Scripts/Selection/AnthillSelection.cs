@@ -35,13 +35,14 @@ public class AnthillSelection : MonoBehaviour
             a.gameObject.SetActive(false);
         }
 
+        iTwo.gameObject.SetActive(false);
+        iThree.gameObject.SetActive(false);
+
         if (iOne.gameObject.activeInHierarchy == true)
         {
             left.gameObject.SetActive(false);
         }
         Time.timeScale = 0;
-        iTwo.gameObject.SetActive(false);
-        iThree.gameObject.SetActive(false);
     }
 
     public void NextButton()
@@ -52,12 +53,14 @@ public class AnthillSelection : MonoBehaviour
         {
             iOne.gameObject.SetActive(false);
             iTwo.gameObject.SetActive(true);
+            iThree.gameObject.SetActive(false);
 
             left.gameObject.SetActive(true);
         }
 
         if (i == 2)
         {
+            iOne.gameObject.SetActive(false);
             iTwo.gameObject.SetActive(false);
             iThree.gameObject.SetActive(true);
 
@@ -74,12 +77,14 @@ public class AnthillSelection : MonoBehaviour
         {
             iOne.gameObject.SetActive(true);
             iTwo.gameObject.SetActive(false);
+            iThree.gameObject.SetActive(false);
 
             left.gameObject.SetActive(false);
         }
 
         if (i == 1)
         {
+            iOne.gameObject.SetActive(false);
             iTwo.gameObject.SetActive(true);
             iThree.gameObject.SetActive(false);
 

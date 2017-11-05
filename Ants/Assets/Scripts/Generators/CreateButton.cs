@@ -6,9 +6,9 @@ using UnityEngine.UI;
 public class CreateButton : MonoBehaviour
 {
     public Image[] imagesArray = new Image[10];
-    float tAG = 30f;
-    float tWaG = 30f;
-    float tWG = 30f;
+    float tAG = 0f;
+    float tWaG = 0f;
+    float tWG = 0f;
 
     CanvasEvents mCanvasE;
     Generators mGens;
@@ -48,15 +48,16 @@ public class CreateButton : MonoBehaviour
 
     public void ArchersTime()
     {
-        tAG -= Time.deltaTime;
+        tAG += Time.deltaTime;
+        Debug.Log(tAG);
         for (int i = 0; i < imagesArray.Length; i++)
         {
-            if (tAG < 0f)
+            if (tAG > 5f)
             {
                 if (imagesArray[i].gameObject.activeInHierarchy == true)
                 {
                     imagesArray[i].gameObject.SetActive(false);
-                    tAG = 30;
+                    tAG = 0f;
                     break;
                 }
             }
@@ -66,7 +67,7 @@ public class CreateButton : MonoBehaviour
     public void WarriorsTime()
     {
         tWaG -= Time.deltaTime;
-        Debug.Log(tWaG);
+        
         for (int i = 0; i < imagesArray.Length; i++)
         {
             if (tWaG < 10f)
