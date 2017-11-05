@@ -21,6 +21,11 @@ public class Grasshopper : MonoBehaviour, IEnemies
     float cooldownTime = 3f;
     float damage = 10.0f;
 
+    public delegate void DieGH();
+    public static event DieGH OnDieGrasshopper;
+
+    int deadGH = 0;
+
     // Use this for initialization
     void Start()
     {
@@ -40,6 +45,13 @@ public class Grasshopper : MonoBehaviour, IEnemies
 
 		if(life <= 0)
         {
+            deadGH++;
+
+            if (deadGH == 3)
+            {
+                OnDieGrasshopper();
+            }
+
             gameObject.SetActive(false);
             mTransform.position = initialPosition;
             mBody.velocity = new Vector3(0, 0, 0);

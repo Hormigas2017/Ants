@@ -17,7 +17,8 @@ public class Hut : MonoBehaviour
         mTransform = GetComponent<Transform>();
         spawnReference = mTransform.Find("Spawn Ref").GetComponent<Transform>();
         timer = 1f;
-        if(spawn)
+
+        if (spawn)
         {
             InvokeRepeating("Spawn", 0.5f, timer);
         }

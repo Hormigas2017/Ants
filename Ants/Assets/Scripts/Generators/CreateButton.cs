@@ -22,6 +22,11 @@ public class CreateButton : MonoBehaviour
 
     bool archerBool = false, workerBool = false, warriorBool = false;
 
+    public delegate void FiveArchers();
+    public static event FiveArchers OnFiveArchers;
+
+    int fiveArchers = 0;
+
     void Start ()
     {
         mCanvasE = GetComponent<CanvasEvents>();
@@ -100,6 +105,13 @@ public class CreateButton : MonoBehaviour
                 {
                     imagesArrayArchers[i].gameObject.SetActive(false);
                     spawnArchers.Play();
+                    fiveArchers++;
+
+                    if (fiveArchers == 5)
+                    {
+                        OnFiveArchers();
+                    }
+
                     tAG = 0f;
                     break;
                 }

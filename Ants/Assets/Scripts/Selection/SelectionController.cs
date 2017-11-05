@@ -54,7 +54,6 @@ namespace Selection
                 selectedUnit = hit.collider.gameObject.GetComponentInParent<SelectableUnit>();
                 if (selectedUnit != null)
                 {
-
                     break;
                 }
             }
@@ -99,7 +98,6 @@ namespace Selection
                 selectionBoxImage.gameObject.SetActive(true);
                 selectionBoxRect = new Rect();
                 selectionStartPos = eventData.position;
-                Debug.Log("Called");
             }
         }
 

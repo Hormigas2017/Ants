@@ -13,6 +13,9 @@ public class SurvivalTime : MonoBehaviour
     private int minutes = 0;
     private int hours = 0;
 
+    public delegate void TwoMinutes();
+    public static event TwoMinutes OnTwoMinutes;
+
     void Start()
     {
         tSecs.text = " " + secs;
@@ -28,6 +31,11 @@ public class SurvivalTime : MonoBehaviour
             minutes += 1;
             tMinutes.text = " " + minutes.ToString("00:");
             secs = 0f;
+
+            if (minutes == 2)
+            {
+                OnTwoMinutes();
+            }
         }
 
         if (minutes > 59)

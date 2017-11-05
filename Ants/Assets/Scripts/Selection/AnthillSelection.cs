@@ -96,7 +96,6 @@ public class AnthillSelection : MonoBehaviour
     {
         if (i == 0)
         {
-            Debug.Log(i);
             arrayCharacters[0].gameObject.SetActive(true);
             arrayCharacters[1].gameObject.SetActive(false);
             arrayCharacters[2].gameObject.SetActive(false);
