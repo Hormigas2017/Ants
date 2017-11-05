@@ -5,7 +5,10 @@ using UnityEngine.UI;
 
 public class CreateButton : MonoBehaviour
 {
-    public Image[] imagesArray = new Image[10];
+    public Image[] imagesArrayWorkers = new Image[10];
+    public Image[] imagesArrayArchers = new Image[10];
+    public Image[] imagesArrayWarriors = new Image[10];
+
     float tAG = 0f;
     float tWaG = 0f;
     float tWG = 0f;
@@ -15,8 +18,10 @@ public class CreateButton : MonoBehaviour
 
     AudioSource spawnWarriors;
     AudioSource spawnArchers;
+    AudioSource spawnWorkers;
 
-    // Use this for initialization
+    bool archerBool = false, workerBool = false, warriorBool = false;
+
     void Start ()
     {
         mCanvasE = GetComponent<CanvasEvents>();
@@ -24,23 +29,61 @@ public class CreateButton : MonoBehaviour
 
         spawnWarriors = GameObject.Find("SpawnWaA").GetComponent<AudioSource>();
         spawnArchers = GameObject.Find("SpawnAA").GetComponent<AudioSource>();
+        spawnWorkers = GameObject.Find("SpawnWA").GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (archerBool == true)
+        {
+            tAG += Time.deltaTime;
+        }
+        if (warriorBool == true)
+        {
+            tWaG += Time.deltaTime;
+        }
+        if (workerBool == true)
+        {
+            tWG += Time.deltaTime;
+        }
+
         ArchersTime();
         WarriorsTime();
         WorkersTime();
     }
 
-    public void NumAnts()
+    public void NumAntsWorkers()
     {
-        for (int i = 0; i < imagesArray.Length; i++)
+        for (int i = 0; i < imagesArrayWorkers.Length; i++)
         {
-            if (imagesArray[i].gameObject.activeInHierarchy == false)
+            if (imagesArrayWorkers[i].gameObject.activeInHierarchy == false)
             {
-                imagesArray[i].gameObject.SetActive(true);
+                imagesArrayWorkers[i].gameObject.SetActive(true);
+                workerBool = true;
+                break;
+            }
+        }
+    }
+    public void NumAntsArchers()
+    {
+        for (int i = 0; i < imagesArrayArchers.Length; i++)
+        {
+            if (imagesArrayArchers[i].gameObject.activeInHierarchy == false)
+            {
+                imagesArrayArchers[i].gameObject.SetActive(true);
+                archerBool = true;
+                break;
+            }
+        }
+    }
+    public void NumAntsWarriors()
+    {
+        for (int i = 0; i < imagesArrayWarriors.Length; i++)
+        {
+            if (imagesArrayWarriors[i].gameObject.activeInHierarchy == false)
+            {
+                imagesArrayWarriors[i].gameObject.SetActive(true);
+                warriorBool = true;
                 break;
             }
         }
@@ -48,15 +91,15 @@ public class CreateButton : MonoBehaviour
 
     public void ArchersTime()
     {
-        tAG += Time.deltaTime;
-        Debug.Log(tAG);
-        for (int i = 0; i < imagesArray.Length; i++)
+        
+        for (int i = 0; i < imagesArrayArchers.Length; i++)
         {
-            if (tAG > 5f)
+            if (tAG > 20f)
             {
-                if (imagesArray[i].gameObject.activeInHierarchy == true)
+                if (imagesArrayArchers[i].gameObject.activeInHierarchy == true)
                 {
-                    imagesArray[i].gameObject.SetActive(false);
+                    imagesArrayArchers[i].gameObject.SetActive(false);
+                    spawnArchers.Play();
                     tAG = 0f;
                     break;
                 }
@@ -66,19 +109,16 @@ public class CreateButton : MonoBehaviour
 
     public void WarriorsTime()
     {
-        tWaG -= Time.deltaTime;
         
-        for (int i = 0; i < imagesArray.Length; i++)
+        for (int i = 0; i < imagesArrayWarriors.Length; i++)
         {
-            if (tWaG < 10f)
+            if (tWaG > 15f)
             {
-                if (imagesArray[i].gameObject.activeInHierarchy == true)
+                if (imagesArrayWarriors[i].gameObject.activeInHierarchy == true)
                 {
-                    imagesArray[i].gameObject.SetActive(false);
-
-                    spawnWarriors.Play();//Audio source
-
-                    tWaG = 30f;
+                    imagesArrayWarriors[i].gameObject.SetActive(false);
+                    spawnWarriors.Play();
+                    tWaG = 0f;
                     break;
                 }
             }
@@ -87,15 +127,16 @@ public class CreateButton : MonoBehaviour
 
     public void WorkersTime()
     {
-        tWG -= Time.deltaTime;
-        for (int i = 0; i < imagesArray.Length; i++)
+        
+        for (int i = 0; i < imagesArrayWorkers.Length; i++)
         {
-            if (tWG < 20f)
+            if (tWG > 10f)
             {
-                if (imagesArray[i].gameObject.activeInHierarchy == true)
+                if (imagesArrayWorkers[i].gameObject.activeInHierarchy == true)
                 {
-                    imagesArray[i].gameObject.SetActive(false);
-                    tWG = 30f;
+                    imagesArrayWorkers[i].gameObject.SetActive(false);
+                    spawnWorkers.Play();
+                    tWG = 0f;
                     break;
                 }
             }

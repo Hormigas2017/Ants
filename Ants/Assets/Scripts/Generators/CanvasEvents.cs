@@ -11,6 +11,7 @@ public class CanvasEvents : MonoBehaviour {
     void Start ()
     {
         bools = GameObject.Find("WorkersGenerator").GetComponent<Generators>();
+
         Generators.WorkersGen += CanvasWG;
         Generators.ArchersGen += CanvasAG;
         Generators.WarriorsGen += CanvasWaG;

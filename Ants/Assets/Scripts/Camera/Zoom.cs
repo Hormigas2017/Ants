@@ -13,11 +13,13 @@ public class Zoom : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetAxis("Mouse ScrollWheel") > 0)
+       
+        if (Input.GetAxis("Mouse ScrollWheel") > 0 && mCamera.orthographicSize>3)
         {
             mCamera.orthographicSize--;
         }
-        if (Input.GetAxis("Mouse ScrollWheel") < 0)
+       
+        if (Input.GetAxis("Mouse ScrollWheel") < 0 && mCamera.orthographicSize < 30)
         {
             mCamera.orthographicSize++;
         }
