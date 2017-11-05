@@ -1,48 +1,56 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class SelectableUnit : MonoBehaviour
+namespace Selection
 {
-    private bool selected = false;
-
-    public bool IsSelected()
+    public class SelectableUnit : MonoBehaviour
     {
-        return selected;
-    }
+        [SerializeField]
+        private GameObject selectionIndicator;
+        private bool selected = false;
 
-    public void SelectUnit()
-    {
-        selected = true;
-    }
 
-    public void DeselectUnit()
-    {
-        selected = false;
-    }
-
-    private void OnEnable()
-    {
-        SelectionController.OnBoxSelection += BoxSelection;
-    }
-
-    void BoxSelection()
-    {
-        Vector2 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
-        if (SelectionController.selectionBoxRect.Contains(screenPosition))
+        public bool IsSelected()
         {
-            if (!SelectionController.selectedUnits.Contains(this))
-            {
-                SelectionController.selectedUnits.Add(this);
-            }
+            return selected;
         }
-        else
+
+        public void SelectUnit()
         {
-            if (Input.GetKey(KeyCode.LeftControl) && IsSelected())
+            selected = true;
+            selectionIndicator.SetActive(true);
+        }
+
+        public void DeselectUnit()
+        {
+            selected = false;
+            selectionIndicator.SetActive(false);
+
+        }
+
+        private void OnEnable()
+        {
+            SelectionController.OnBoxSelection += BoxSelection;
+        }
+
+        void BoxSelection()
+        {
+            Vector2 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
+            if (SelectionController.selectionBoxRect.Contains(screenPosition))
             {
                 if (!SelectionController.selectedUnits.Contains(this))
                 {
                     SelectionController.selectedUnits.Add(this);
+                }
+            }
+            else
+            {
+                if (Input.GetKey(KeyCode.LeftControl) && IsSelected())
+                {
+                    if (!SelectionController.selectedUnits.Contains(this))
+                    {
+                        SelectionController.selectedUnits.Add(this);
+                    }
                 }
             }
         }

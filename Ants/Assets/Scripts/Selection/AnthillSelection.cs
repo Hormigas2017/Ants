@@ -39,7 +39,7 @@ public class AnthillSelection : MonoBehaviour
         {
             left.gameObject.SetActive(false);
         }
-
+        Time.timeScale = 0;
         iTwo.gameObject.SetActive(false);
         iThree.gameObject.SetActive(false);
     }
@@ -108,5 +108,7 @@ public class AnthillSelection : MonoBehaviour
             arrayCharacters[1].gameObject.SetActive(false);
             arrayCharacters[2].gameObject.SetActive(true);
         }
+
+        Time.timeScale = 1;
     }
 }

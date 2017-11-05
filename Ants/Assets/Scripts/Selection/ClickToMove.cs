@@ -2,47 +2,63 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-
-public class ClickToMove : MonoBehaviour
+namespace Selection
 {
-    private NavMeshAgent navAgent;
-    private Animator anim;
-
-    public Vector3 targetPos; //Position of Mouse "To go"
-    public LayerMask groundLayer; //Layer of ground
-
-    public string clickToMove = "Fire1";
-    private SelectableUnit selectable;
-
-    private void Awake()
+    public class ClickToMove : MonoBehaviour
     {
-        navAgent = GetComponent<NavMeshAgent>();
-        selectable = GetComponent<SelectableUnit>();
-        anim = GetComponent<Animator>();
-    }
+        private NavMeshAgent navAgent;
+        //private Animator anim;
+        [SerializeField]
+        //private LineRenderer trace;
+        public Vector3 targetPos;
+        public LayerMask groundLayer; // capa del suelo;
+        private SelectableUnit selectable;
 
-    private void Update()
-    {
-        //anim.SetFloat("Velocity", navAgent.velocity.sqrMagnitude);
-
-        if (Input.GetButtonDown(clickToMove))
+        private void Awake()
         {
-            MoveTowardsClick();
+            navAgent = GetComponent<NavMeshAgent>();
+            //anim = GetComponentInChildren<Animator>();
+            selectable = GetComponent<SelectableUnit>();
         }
-    }
 
-    private void MoveTowardsClick()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayer))
+        private void Update()
         {
-            if (targetPos != hit.point)
+            //anim.SetFloat("velocity", navAgent.velocity.sqrMagnitude);
+
+            //trace.SetPosition(0, transform.position);
+
+            if (Input.GetButtonDown("Fire2") && selectable.IsSelected())
             {
-                targetPos = hit.point;
+                MoveTowardsClick();
             }
-            navAgent.SetDestination(targetPos);
+
+            if (selectable.IsSelected())
+            {
+                if (navAgent.remainingDistance <= navAgent.stoppingDistance)
+                {
+                    //trace.enabled = false;
+                }
+                //else
+                    //trace.enabled = true;
+
+            }
+            //else
+                //trace.enabled = false;
+        }
+
+        private void MoveTowardsClick()
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            int radius = SelectionController.selectedUnits.Count / 2;
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayer))
+            {
+                targetPos = hit.point + new Vector3(Random.Range(-radius, radius), 0, Random.Range(-radius, radius));
+                navAgent.SetDestination(targetPos);
+                //trace.SetPosition(1, targetPos);
+
+            }
         }
     }
 }
+

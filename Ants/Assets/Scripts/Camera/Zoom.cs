@@ -4,19 +4,22 @@ using UnityEngine;
 
 public class Zoom : MonoBehaviour
 {
-	void Start () {
-		
+    Camera mCamera;
+
+	void Start ()
+    {
+        mCamera = GetComponentInChildren<Camera>();
 	}
 
     void Update()
     {
         if (Input.GetAxis("Mouse ScrollWheel") > 0)
         {
-            GetComponent<Transform>().position = new Vector3 (transform.position.x,transform.position.y-0.3f,transform.position.z+0.2f);
+            mCamera.orthographicSize--;
         }
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
-            GetComponent<Transform>().position = new Vector3(transform.position.x, transform.position.y + 0.3f, transform.position.z - 0.2f);
+            mCamera.orthographicSize++;
         }
     }
 }
