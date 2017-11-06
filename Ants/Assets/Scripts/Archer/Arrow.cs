@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Arrow : MonoBehaviour {
 
-    Rigidbody mBody;
+    //Rigidbody mBody;
     Vector3 initialPos;
     public bool shot = false;
     public float duration = 6;
@@ -12,7 +12,7 @@ public class Arrow : MonoBehaviour {
     public float damage = 20;
     void Start ()
     {
-        mBody = GetComponent<Rigidbody>();
+        //mBody = GetComponent<Rigidbody>();
         initialPos = new Vector3();
         initialPos = gameObject.GetComponent<Transform>().position;
     }

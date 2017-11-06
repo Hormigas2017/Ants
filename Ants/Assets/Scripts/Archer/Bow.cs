@@ -19,8 +19,6 @@ public class Bow : MonoBehaviour
     {
         mTransform = GameObject.Find("Bow").GetComponent<Transform>();
         shotSound = GetComponent<AudioSource>();
-        GameObject[] enemies;
-        enemies = GameObject.FindGameObjectsWithTag(enemyTag);
         enemy = FindClosestEnemy();
         enemyTransform = enemy.transform;
     }

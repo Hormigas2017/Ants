@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class Grasshopper : MonoBehaviour, IEnemies
 {
@@ -12,21 +13,26 @@ public class Grasshopper : MonoBehaviour, IEnemies
     Rigidbody mBody;
     GameObject player;
     Transform playerTransform;
-    public string playerName = "Master";
-    float moveSpeed = 5.0f;
-    //float maxDist = 20.0f;
     float minDist = 2.0f;
     bool attackCooldown = true;
     float t = 0.0f;
     float cooldownTime = 3f;
     float damage = 10.0f;
+    float time = 0;
 
     public delegate void DieGH();
     public static event DieGH OnDieGrasshopper;
 
+    NavMeshAgent navAgent;
+    public LayerMask layerMask;
+
+    bool attack;
+    float speed;
+    bool rotTime;
+    float y;
+
     int deadGH = 0;
 
-    // Use this for initialization
     void Start()
     {
         mTransform = GetComponent<Transform>();
@@ -34,16 +40,17 @@ public class Grasshopper : MonoBehaviour, IEnemies
         lifeSlider.value = 100f;
         initialPosition = mTransform.position;
         mBody = GetComponent<Rigidbody>();
-        playerTransform = GameObject.Find(playerName).GetComponent<Transform>();
-        player = GameObject.Find(playerName);
-	}
-	
-	// Update is called once per frame
-	void Update ()
+        player = GameObject.Find("Player");
+        playerTransform = player.transform;
+        navAgent = GetComponentInParent<NavMeshAgent>();
+        speed = 10f;
+    }
+
+    void Update()
     {
         lifeSlider.value = life;
 
-		if(life <= 0)
+        if (life <= 0)
         {
             deadGH++;
 
@@ -57,45 +64,112 @@ public class Grasshopper : MonoBehaviour, IEnemies
             mBody.velocity = new Vector3(0, 0, 0);
         }
 
-        if(GameObject.Find(playerName).activeInHierarchy)
-        {
-
-            if (player.activeInHierarchy)
-            {
-                mTransform.LookAt(playerTransform);
-                mTransform.position += mTransform.forward * moveSpeed * Time.deltaTime;
-
-                if (Vector3.Distance(mTransform.position, playerTransform.position) <= minDist)
-                {
-                    if (attackCooldown == true)
-                    {
-                        attackCooldown = false;
-                        t = 0f;
-                        MeleeAttack();
-                    }
-                }
-            }
-        }
-        if(attackCooldown == false)
+        if (attackCooldown == false)
         {
             t += Time.deltaTime;
         }
-        if(t >= cooldownTime)
+        if (t >= cooldownTime)
         {
             attackCooldown = true;
         }
-	}
+    }
+
+    private void FixedUpdate()
+    {
+        time++;
+
+        if(!attack)
+        {
+            navAgent.enabled = false;
+            Idle();
+        }
+        if(attack)
+        {
+            navAgent.enabled = true;
+            Attack();
+        }
+    }
 
     public void Destroy(float _damage)
     {
         life -= _damage;
     }
-    public void MeleeAttack()
+
+    void MeleeAttack()
     {
-        if(player.GetComponent<IAnts>() != null)
+        if (player.GetComponent<IAnts>() != null)
         {
             IAnts iAnts = player.GetComponent<IAnts>();
             iAnts.Damage(damage);
         }
     }
+
+    void Idle()
+    {
+        transform.Translate(Vector3.forward * speed * Time.fixedDeltaTime);
+        transform.Rotate(new Vector3(0, y, 0));
+        if(time >= Random.Range(100, 2500))
+        {
+            Rotate();
+            time = 0;
+            rotTime = true;
+        }
+
+        if(rotTime)
+        {
+            if(time >= Random.Range(10, 30))
+            {
+                y = 0;
+                rotTime = false;
+            }
+        }
+    }
+
+    void Rotate()
+    {
+        y = Random.Range(-5, 5);
+    }
+
+    void Attack()
+    {
+        navAgent.SetDestination(playerTransform.position);
+
+        if (player.activeInHierarchy)
+        {
+            if (Vector3.Distance(mTransform.position, playerTransform.position) <= minDist)
+            {
+                if (attackCooldown == true)
+                {
+                    attackCooldown = false;
+                    t = 0f;
+                    MeleeAttack();
+                }
+            }
+        }
+        if (Vector3.Distance(playerTransform.position, transform.position) > 100)
+        {
+            attack = false;
+            navAgent.isStopped = true;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Player")
+        {
+            attack = true;
+            navAgent.enabled = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            attack = false;
+            navAgent.enabled = false;
+        }
+    }
 }
+    
+

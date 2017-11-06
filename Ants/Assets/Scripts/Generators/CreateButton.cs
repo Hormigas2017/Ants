@@ -13,8 +13,8 @@ public class CreateButton : MonoBehaviour
     float tWaG = 0f;
     float tWG = 0f;
 
-    CanvasEvents mCanvasE;
-    Generators mGens;
+    //CanvasEvents mCanvasE;
+    //Generators mGens;
 
     AudioSource spawnWarriors;
     AudioSource spawnArchers;
@@ -29,8 +29,8 @@ public class CreateButton : MonoBehaviour
 
     void Start ()
     {
-        mCanvasE = GetComponent<CanvasEvents>();
-        mGens = GetComponent<Generators>();
+        //mCanvasE = GetComponent<CanvasEvents>();
+       // mGens = GetComponent<Generators>();
 
         spawnWarriors = GameObject.Find("SpawnWaA").GetComponent<AudioSource>();
         spawnArchers = GameObject.Find("SpawnAA").GetComponent<AudioSource>();

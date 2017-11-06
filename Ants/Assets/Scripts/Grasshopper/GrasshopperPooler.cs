@@ -21,7 +21,7 @@ public class GrasshopperPooler : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        grasshopper = GameObject.Find("Grasshopper");
+        grasshopper = GameObject.Find("WarriorGrasshopper");
         ghPool = new List<GameObject>();//Starting the grasshopper list
         for (int i = 0; i < ghNumber; i++)//Filling the grasshopper pool
         {

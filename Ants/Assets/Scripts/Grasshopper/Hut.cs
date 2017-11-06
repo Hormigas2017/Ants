@@ -5,18 +5,16 @@ using UnityEngine;
 public class Hut : MonoBehaviour
 {
     public bool spawn = true;
-    Transform mTransform;
     Transform spawnReference;
     Transform ghTransform;
     float timer; //Spawn Frecuency
-    float t = 0;
+    //float t = 0;
 
 	// Use this for initialization
 	void Start ()
     {
-        mTransform = GetComponent<Transform>();
-        spawnReference = mTransform.Find("Spawn Ref").GetComponent<Transform>();
-        timer = 1f;
+        spawnReference = transform.Find("Spawn Ref").GetComponent<Transform>();
+        timer = 5f;
 
         if (spawn)
         {
