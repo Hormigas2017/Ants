@@ -5,28 +5,47 @@ using UnityEngine;
 public class FoodHarvest : MonoBehaviour {
 
 
-    public float extractionRatio = 100;
+    float extractionWood = 150f;
+    float extractionFood = 200f;
+    float extractionStone = 100f;
     Rigidbody mCuerpo;
-    
 
-	// Use this for initialization
-	void Start () {
-     
+    AudioSource eating;
+
+    float t = 0f;
+
+	void Start ()
+    {
         mCuerpo = GetComponent<Rigidbody>();
+        eating = GameObject.Find("Eating").GetComponent<AudioSource>();
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
         mCuerpo.WakeUp();
     }
 
     private void OnCollisionStay(Collision pCollision)
     {
         GameObject arrived = pCollision.gameObject;
+
+        t += Time.deltaTime;
+
+        if (t > 1f)
+        {
+            eating.Play();
+            t = 0;
+        }
+
         if (arrived.GetComponent<IExtractResources>() != null)
         {
             IExtractResources resourcesInterface = arrived.GetComponent<IExtractResources>();
-            resourcesInterface.Extractor(extractionRatio);
+            resourcesInterface.Extractor(extractionWood,extractionFood,extractionStone);
         }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        eating.Stop();
     }
 }

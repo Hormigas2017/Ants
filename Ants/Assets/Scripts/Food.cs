@@ -4,25 +4,32 @@ using UnityEngine;
 
 public class Food : MonoBehaviour, IExtractResources {
 
-    
     public float foodAvailable = 1000;
     Rigidbody mCuerpo;
+    GameObject wood;
 
-	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
         mCuerpo = GetComponent<Rigidbody>();
-	}
+
+        wood = GameObject.FindGameObjectWithTag("Wood");
+    }
 	
-	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
         mCuerpo.WakeUp();
+
         if (foodAvailable <= 0)
         {
-            Destroy(gameObject);
+            wood.gameObject.SetActive(false);
         }
     }
-    public void Extractor(float pFood)
+    public void Extractor(float pWood, float pFood, float pStone)
     {
-        foodAvailable -= pFood*Time.deltaTime;
+        if (wood)
+        {
+            foodAvailable -= pWood * Time.deltaTime;
+            Debug.Log("Como wood");
+        }
     }
 }

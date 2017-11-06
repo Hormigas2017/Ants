@@ -7,6 +7,11 @@ TagManager:
   - WorkersGen
   - ArchersGen
   - WarriorsGen
+  - WarriorAnt
+  - WorkerAnt
+  - Wood
+  - Food
+  - Stone
   layers:
   - Default
   - TransparentFX

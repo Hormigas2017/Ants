@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IExtractResources {
 
-    void Extractor(float pFood);
+    void Extractor(float pWood,float pFood, float pStone);
 }
