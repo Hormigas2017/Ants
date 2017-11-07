@@ -20,6 +20,11 @@ namespace Selection
         public delegate void SelectionAction();
         public static event SelectionAction OnBoxSelection;
 
+        public delegate void TutorialSelection();
+        public static event TutorialSelection OnSelectionTutorial;
+
+        public bool selectedUnitTutorial;
+
         private void Awake()
         {
             selectedUnits = new List<SelectableUnit>();
@@ -50,7 +55,6 @@ namespace Selection
             SelectableUnit selectedUnit = null;
             foreach (RaycastHit hit in hits)
             {
-
                 selectedUnit = hit.collider.gameObject.GetComponentInParent<SelectableUnit>();
                 if (selectedUnit != null)
                 {
@@ -64,6 +68,12 @@ namespace Selection
                 if (!selectedUnits.Contains(selectedUnit))
                 {
                     selectedUnits.Add(selectedUnit);
+                    selectedUnitTutorial = true;
+
+                    if (selectedUnitTutorial)
+                    {
+                        OnSelectionTutorial();
+                    }
                 }
             }
             else
@@ -148,5 +158,7 @@ namespace Selection
             }
 
         }
+
+
     }
 }
