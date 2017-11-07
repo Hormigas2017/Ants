@@ -14,7 +14,6 @@ public class CanvasEvents : MonoBehaviour {
         Generators.WorkersGen += CanvasWG;
         Generators.ArchersGen += CanvasAG;
         Generators.WarriorsGen += CanvasWaG;
-
     }
 	
 	void Update ()
@@ -66,6 +65,29 @@ public class CanvasEvents : MonoBehaviour {
         else
         {
             canvasWaG.SetActive(false);
+        }
+    }
+
+    public void ExitCanvasWG()
+    {
+        if (mGenerators.boolWg == true)
+        {
+            mGenerators.boolWg = false;
+        }
+    }
+
+    public void ExitCanvasAG()
+    {
+        if (mGenerators.boolAg == true)
+        {
+            mGenerators.boolAg = false;
+        }
+    }
+    public void ExitCanvasWaG()
+    {
+        if (mGenerators.boolWag == true)
+        {
+            mGenerators.boolWag = false;
         }
     }
 }
