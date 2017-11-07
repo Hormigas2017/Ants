@@ -4,20 +4,19 @@ using UnityEngine;
 
 public class CanvasEvents : MonoBehaviour {
 
-    public Transform canvasWG, canvasAG, canvasWaG;
-    Generators bools;
+    public GameObject canvasWG, canvasAG, canvasWaG;
+    Generators mGenerators;
 
-    // Use this for initialization
     void Start ()
     {
-        bools = GameObject.Find("WorkersGenerator").GetComponent<Generators>();
+        mGenerators = GameObject.Find("WorkersGenerator").GetComponent<Generators>();
 
         Generators.WorkersGen += CanvasWG;
         Generators.ArchersGen += CanvasAG;
         Generators.WarriorsGen += CanvasWaG;
+
     }
 	
-	// Update is called once per frame
 	void Update ()
     {
         CanvasWG();
@@ -27,46 +26,46 @@ public class CanvasEvents : MonoBehaviour {
 
     public void CanvasWG()
     {
-        if (bools.boolWg == true)
+        if (mGenerators.boolWg == true)
         {
-            if (canvasWG.gameObject.activeInHierarchy == false)
+            if (canvasWG.activeInHierarchy == false)
             {
-                canvasWG.gameObject.SetActive(true);
+                canvasWG.SetActive(true);
             }
         }
         else
         {
-            canvasWG.gameObject.SetActive(false);
+            canvasWG.SetActive(false);
         }
     }
 
     public void CanvasAG()
     {
-        if (bools.boolAg == true)
+        if (mGenerators.boolAg == true)
         {
-            if (canvasAG.gameObject.activeInHierarchy == false)
+            if (canvasAG.activeInHierarchy == false)
             {
-                canvasAG.gameObject.SetActive(true);
+                canvasAG.SetActive(true);
             }
         }
         else
         {
-            canvasAG.gameObject.SetActive(false);
+            canvasAG.SetActive(false);
         }
     }
 
     public void CanvasWaG()
     {
-        if (bools.boolWag == true)
+        if (mGenerators.boolWag == true)
         {
-            if (canvasWaG.gameObject.activeInHierarchy == false)
+            if (canvasWaG.activeInHierarchy == false)
             {
-                canvasWaG.gameObject.SetActive(true);
+                canvasWaG.SetActive(true);
             }
         }
         else
         {
-            canvasWaG.gameObject.SetActive(false);
+            canvasWaG.SetActive(false);
         }
     }
 }

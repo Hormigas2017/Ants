@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 namespace Selection
 {
@@ -15,11 +16,20 @@ namespace Selection
         public LayerMask groundLayer; // capa del suelo;
         private SelectableUnit selectable;
 
+        public delegate void TutorialMoveUnit();
+        public static event TutorialMoveUnit OnMoveUnitTutorial;
+
+        bool moveUnitTutotial = false;
+
+        Scene mScene;
+
         private void Awake()
         {
             navAgent = GetComponent<NavMeshAgent>();
             //anim = GetComponentInChildren<Animator>();
             selectable = GetComponent<SelectableUnit>();
+
+            mScene = SceneManager.GetActiveScene();
         }
 
         private void Update()
@@ -56,6 +66,13 @@ namespace Selection
             {
                 targetPos = hit.point + new Vector3(Random.Range(-radius, radius), 0, Random.Range(-radius, radius));
                 navAgent.SetDestination(targetPos);
+
+                moveUnitTutotial = true;
+
+                if (moveUnitTutotial && mScene.name == "tutorial")
+                {
+                    OnMoveUnitTutorial();
+                }
                 //trace.SetPosition(1, targetPos);
 
             }

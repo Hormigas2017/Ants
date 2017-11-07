@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Tutorial : MonoBehaviour {
 
@@ -16,10 +17,22 @@ public class Tutorial : MonoBehaviour {
     GameObject selectCharacter;
     GameObject mouseScrollSprite;
     GameObject goodJob;
+    GameObject good;
+    GameObject generator;
+    GameObject selectGenerator;
+    GameObject goodOne;
+    GameObject nice;
+    GameObject continuar;
+    GameObject skip;
+
+    GameObject canvas;
 
     bool boolMove = false;
     bool boolScroll = false;
     bool boolSelectioned = false;
+    bool boolMoveUnit = false;
+    bool boolSelectGenerator = false;
+    bool boolUnitGeneration = false;
 
     void Start ()
     {
@@ -31,6 +44,14 @@ public class Tutorial : MonoBehaviour {
         selectCharacter = GameObject.Find("SelectCharacter");
         mouseScrollSprite = GameObject.Find("MouseScrollSprite");
         goodJob = GameObject.Find("GoodJob");
+        good = GameObject.Find("Good");
+        generator = GameObject.Find("WorkersGen");
+        selectGenerator = GameObject.Find("SelectGen");
+        canvas = GameObject.Find("CanvasWorkG");
+        goodOne = GameObject.Find("Good1");
+        nice = GameObject.Find("Nice");
+        continuar = GameObject.Find("Continue");
+        skip = GameObject.Find("TextSkip");
 
         welcome.SetActive(false);
         move.SetActive(false);
@@ -40,6 +61,13 @@ public class Tutorial : MonoBehaviour {
         selectCharacter.SetActive(false);
         mouseScrollSprite.SetActive(false);
         goodJob.SetActive(false);
+        good.SetActive(false);
+        generator.SetActive(false);
+        selectGenerator.SetActive(false);
+        goodOne.SetActive(false);
+        canvas.SetActive(false);
+        nice.SetActive(false);
+        continuar.SetActive(false);
 
         foreach (GameObject a in arrows)
         {
@@ -51,13 +79,15 @@ public class Tutorial : MonoBehaviour {
         CameraMove.OnCameraSize += CheckCameraScroll;
 
         Selection.SelectionController.OnSelectionTutorial += CheckSelectedUnit;
-        
+        Selection.ClickToMove.OnMoveUnitTutorial += CheckMoveUnit;
+        Generators.OnSelectedGenerator += CheckSelectedGenerator;
+        CreateUnitTutorial.OnCreateUnitGen += CheckUnitGeneration;
+
     }
 	
 	void Update ()
     {
         t += Time.deltaTime;
-        Debug.Log(t);
 
         //Welcome
         if (t > 1f && t < 4f)
@@ -108,17 +138,47 @@ public class Tutorial : MonoBehaviour {
         }
 
         //Select character
-        if (t > 14f && t < 18f)
+        if (t > 14f && t < 22f)
         {
             selectCharacter.SetActive(true);
             boolSelectioned = true;
+            boolMoveUnit = true;
         }
         else
         {
             selectCharacter.SetActive(false);
             boolSelectioned = false;
+            goodJob.SetActive(false);
+            good.SetActive(false);
         }
         
+        //Select Gen
+        if (t > 23f && t < 30f)
+        {
+            generator.SetActive(true);
+            boolSelectGenerator = true;
+            selectGenerator.SetActive(true);
+
+            boolUnitGeneration = true;
+        }
+        else
+        {
+            generator.SetActive(false);
+            boolSelectGenerator = false;
+            selectGenerator.SetActive(false);
+            canvas.SetActive(false);
+            goodOne.SetActive(false);
+
+            nice.SetActive(false);
+        }
+
+        //continue
+        if (t> 31 && t< 38f)
+        {
+            continuar.SetActive(true);
+            skip.SetActive(false);
+        }
+
     }
 
     public void CheckCameraMove()
@@ -143,5 +203,35 @@ public class Tutorial : MonoBehaviour {
         {
             goodJob.SetActive(true);
         }
+    }
+
+    public void CheckMoveUnit()
+    {
+        if (boolMoveUnit == true)
+        {
+            good.SetActive(true);
+        }
+    }
+
+    public void CheckSelectedGenerator()
+    {
+        if (boolSelectGenerator == true)
+        {
+            goodOne.SetActive(true);
+            canvas.SetActive(true);
+        }
+    }
+
+    public void CheckUnitGeneration()
+    {
+        if (boolUnitGeneration == true)
+        {
+            nice.SetActive(true);
+        }
+    }
+
+    public void SkipTutorial()
+    {
+        SceneManager.LoadScene("World");
     }
 }

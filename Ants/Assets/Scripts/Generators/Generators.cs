@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Generators : MonoBehaviour
 {
@@ -13,9 +14,15 @@ public class Generators : MonoBehaviour
 
     public bool boolWg = false, boolAg = false, boolWag = false;
 
+    public delegate void GeneratorSelectedTutorial();
+    public static event GeneratorSelectedTutorial OnSelectedGenerator;
+
+    public bool selectedGeneratorTutorial = false;
+    Scene mScene;
+
     void Start ()
     {
-        
+        mScene = SceneManager.GetActiveScene();
 	}
 	
 	void Update ()
@@ -33,7 +40,17 @@ public class Generators : MonoBehaviour
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && hitInfo.transform.tag == "WorkersGen")
             {
                 boolWg = true;
-                WorkersGen();
+                selectedGeneratorTutorial = true;
+
+                if (mScene.name == "World" && boolWg)
+                {
+                    WorkersGen();
+                }
+
+                if (selectedGeneratorTutorial && mScene.name == "tutorial")
+                {
+                    OnSelectedGenerator();
+                }
             }
             /*else
             {

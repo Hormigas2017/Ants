@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 namespace Selection
 {
@@ -23,11 +24,14 @@ namespace Selection
         public delegate void TutorialSelection();
         public static event TutorialSelection OnSelectionTutorial;
 
-        public bool selectedUnitTutorial;
+        bool selectedUnitTutorial = false;
+
+        Scene mScene;
 
         private void Awake()
         {
             selectedUnits = new List<SelectableUnit>();
+            mScene = SceneManager.GetActiveScene();
         }
 
         private void Update()
@@ -68,9 +72,10 @@ namespace Selection
                 if (!selectedUnits.Contains(selectedUnit))
                 {
                     selectedUnits.Add(selectedUnit);
+
                     selectedUnitTutorial = true;
 
-                    if (selectedUnitTutorial)
+                    if (selectedUnitTutorial && mScene.name == "tutorial")
                     {
                         OnSelectionTutorial();
                     }
