@@ -38,5 +38,4 @@ public class Hut : MonoBehaviour
             grasshopper.SetActive(true);
         }  
     }
-
 }

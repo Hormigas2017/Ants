@@ -5,6 +5,11 @@ using UnityEngine.UI;
 
 public class CreateButton : MonoBehaviour
 {
+    public delegate void SpawnAnts();
+    public static event SpawnAnts SpawnWorker;
+    public static event SpawnAnts SpawnWarrior;
+    public static event SpawnAnts SpawnArcher;
+
     public Image[] imagesArrayWorkers = new Image[10];
     public Image[] imagesArrayArchers = new Image[10];
     public Image[] imagesArrayWarriors = new Image[10];
@@ -15,6 +20,7 @@ public class CreateButton : MonoBehaviour
 
     //CanvasEvents mCanvasE;
     //Generators mGens;
+    Generators mGenerators;
 
     AudioSource spawnWarriors;
     AudioSource spawnArchers;
@@ -30,7 +36,8 @@ public class CreateButton : MonoBehaviour
     void Start ()
     {
         //mCanvasE = GetComponent<CanvasEvents>();
-       // mGens = GetComponent<Generators>();
+        // mGens = GetComponent<Generators>();
+        mGenerators = GameObject.Find("WorkersGenerator").GetComponent<Generators>();
 
         spawnWarriors = GameObject.Find("SpawnWaA").GetComponent<AudioSource>();
         spawnArchers = GameObject.Find("SpawnAA").GetComponent<AudioSource>();
@@ -59,6 +66,7 @@ public class CreateButton : MonoBehaviour
 
     public void NumAntsWorkers()
     {
+        mGenerators.boolWg = true;
         for (int i = 0; i < imagesArrayWorkers.Length; i++)
         {
             if (imagesArrayWorkers[i].gameObject.activeInHierarchy == false)
@@ -71,6 +79,7 @@ public class CreateButton : MonoBehaviour
     }
     public void NumAntsArchers()
     {
+        mGenerators.boolAg = true;
         for (int i = 0; i < imagesArrayArchers.Length; i++)
         {
             if (imagesArrayArchers[i].gameObject.activeInHierarchy == false)
@@ -83,6 +92,7 @@ public class CreateButton : MonoBehaviour
     }
     public void NumAntsWarriors()
     {
+        mGenerators.boolWag = true;
         for (int i = 0; i < imagesArrayWarriors.Length; i++)
         {
             if (imagesArrayWarriors[i].gameObject.activeInHierarchy == false)
@@ -104,6 +114,7 @@ public class CreateButton : MonoBehaviour
                 if (imagesArrayArchers[i].gameObject.activeInHierarchy == true)
                 {
                     imagesArrayArchers[i].gameObject.SetActive(false);
+                    SpawnArcher();
                     spawnArchers.Play();
                     fiveArchers++;
 
@@ -129,6 +140,7 @@ public class CreateButton : MonoBehaviour
                 if (imagesArrayWarriors[i].gameObject.activeInHierarchy == true)
                 {
                     imagesArrayWarriors[i].gameObject.SetActive(false);
+                    SpawnWarrior();
                     spawnWarriors.Play();
                     tWaG = 0f;
                     break;
@@ -147,6 +159,7 @@ public class CreateButton : MonoBehaviour
                 if (imagesArrayWorkers[i].gameObject.activeInHierarchy == true)
                 {
                     imagesArrayWorkers[i].gameObject.SetActive(false);
+                    SpawnWorker();
                     spawnWorkers.Play();
                     tWG = 0f;
                     break;
@@ -154,5 +167,4 @@ public class CreateButton : MonoBehaviour
             }
         }
     }
-
 }

@@ -20,6 +20,7 @@ public class Generators : MonoBehaviour
     public bool selectedGeneratorTutorial = false;
     Scene mScene;
 
+
     void Start ()
     {
         mScene = SceneManager.GetActiveScene();
@@ -39,6 +40,8 @@ public class Generators : MonoBehaviour
             RaycastHit hitInfo = new RaycastHit();
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && hitInfo.transform.tag == "WorkersGen")
             {
+                boolWag = false;
+                boolAg = false;
                 boolWg = true;
                 selectedGeneratorTutorial = true;
 
@@ -52,10 +55,6 @@ public class Generators : MonoBehaviour
                     OnSelectedGenerator();
                 }
             }
-            /*else
-            {
-              boolWg = false;
-            }*/
         }
     }
 
@@ -66,15 +65,12 @@ public class Generators : MonoBehaviour
             RaycastHit hitInfo = new RaycastHit();
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && hitInfo.transform.tag == "ArchersGen")
             {
+                boolWag = false;
+                boolWg = false;
                 boolAg = true;
                 ArchersGen();
             }
-            /*else
-            {
-                boolAg = false;
-            }*/
         }
-       
     }
 
     public void FindWarriorsGen()
@@ -84,14 +80,11 @@ public class Generators : MonoBehaviour
             RaycastHit hitInfo = new RaycastHit();
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && hitInfo.transform.tag == "WarriorsGen")
             {
+                boolAg = false;
+                boolWg = false;
                 boolWag = true;
                 WarriorsGen();
             }
-           /* else
-            {
-                boolWag = false;
-            }*/
         }
-        
     }
 }
