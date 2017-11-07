@@ -3,20 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GamePaused : MonoBehaviour {
-    public Transform canvas;
-	
-	// Update is called once per frame
-	void Update () {
+
+    GameObject canvasPaused;
+    GameObject canvasSource;
+
+    private void Awake()
+    {
+        canvasPaused = GameObject.Find("CanvasPaused");
+        canvasSource = GameObject.Find("CanvasSources"); 
+        canvasPaused.SetActive(false);
+        canvasSource.SetActive(false);
+    }
+
+    void Update ()
+    {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (canvas.gameObject.activeInHierarchy == false)
+            if (canvasPaused.activeInHierarchy == false)
             {
-                canvas.gameObject.SetActive(true);
+                canvasPaused.SetActive(true);
+                canvasSource.SetActive(false);
                 Time.timeScale = 0;
             }
             else
             {
-                canvas.gameObject.SetActive(false);
+                canvasPaused.gameObject.SetActive(false);
+                canvasSource.SetActive(true);
                 Time.timeScale = 1;
             }
         }
@@ -24,9 +36,10 @@ public class GamePaused : MonoBehaviour {
 
     public void Resume() {
 
-        if (canvas.gameObject.activeInHierarchy == true)
+        if (canvasPaused.activeInHierarchy == true)
         {
-            canvas.gameObject.SetActive(false);
+            canvasPaused.SetActive(false);
+            canvasSource.SetActive(true);
             Time.timeScale = 1;
         }
     }

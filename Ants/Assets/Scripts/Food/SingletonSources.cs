@@ -5,32 +5,39 @@ using UnityEngine.UI;
 
 public class SingletonSources : MonoBehaviour
 {
-    public float woodCount;
-    public float foodCount;
-    public float stoneCount;
+    public float woodCount =0f;
+    public float foodCount = 0f;
+    public float stoneCount = 0f;
 
     public Text tFood;
     public Text tWood;
     public Text tStone;
 
-    public static SingletonSources instance = null;
+    private static SingletonSources instance = null;
 
 	public static SingletonSources Instance
     {
         get
         {
-            if (instance == null)
-            {
-                instance = new SingletonSources();
-            }
             return instance;
         }
     }
-
-    public SingletonSources()
+    private void Start()
     {
-        woodCount = 0f;
-        foodCount = 0f;
-        stoneCount = 0f;
+        if (instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+    }
+
+    private void Update()
+    {
+        tFood.text = " " + foodCount.ToString("0");
+        tWood.text = " " + woodCount.ToString("0");
+        tStone.text = " " + stoneCount.ToString("0");
     }
 }

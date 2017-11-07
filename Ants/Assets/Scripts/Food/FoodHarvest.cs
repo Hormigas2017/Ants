@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class FoodHarvest : MonoBehaviour {
 
-
     float extractionWood;
     float extractionFood;
     float extractionStone;
-    Rigidbody mCuerpo;
 
+    Rigidbody mCuerpo;
     AudioSource eating;
 
     float t = 0f;
@@ -31,24 +30,37 @@ public class FoodHarvest : MonoBehaviour {
 
         t += Time.deltaTime;
 
-        if (t > 1f)
-        {
-            eating.Play();
-            t = 0;
-        }
-
         if (arrived.gameObject.tag == "Wood")
         {
             extractionWood = 150f;
+
+            if (t > 1f)
+            {
+                eating.Play();
+                t = 0;
+            }
         }
 
         if (arrived.gameObject.tag == "Stone")
         {
             extractionStone = 100f;
+
+            if (t > 1f)
+            {
+                eating.Play();
+                t = 0;
+            }
         }
+
         if (arrived.gameObject.tag == "Food")
         {
-            extractionStone = 200f;
+            extractionFood = 200f;
+
+            if (t > 1f)
+            {
+                eating.Play();
+                t = 0;
+            }
         }
 
         if (arrived.GetComponent<IExtractResources>() != null)
