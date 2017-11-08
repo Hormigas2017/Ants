@@ -41,11 +41,10 @@ namespace Selection
             //anim.SetFloat("velocity", navAgent.velocity.sqrMagnitude);
 
             //trace.SetPosition(0, transform.position);
-            if (!goElseWhere) {
-                if (Input.GetButtonDown("Fire2") && selectable.IsSelected())
-                {
-                    MoveTowardsClick();
-                }
+           
+            if (Input.GetButtonDown("Fire2") && selectable.IsSelected())
+            {
+                MoveTowardsClick();
             }
             if (selectable.IsSelected())
             {

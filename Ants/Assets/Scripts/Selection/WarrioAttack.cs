@@ -6,12 +6,12 @@ namespace Selection
 {
     public class WarrioAttack : MonoBehaviour
     {
-        [SerializeField]
         bool engage = false;
         bool attackCoolDown = false;
         float t = 0;
         NavMeshAgent mNav;
         GameObject enemyFound;
+        public Vector3 targetFound;
         SelectableUnit ifSelection;
         ClickToMove theClick;
 
@@ -52,16 +52,16 @@ namespace Selection
                 RaycastHit hitInfo = new RaycastHit();
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && hitInfo.transform.GetComponent<IEnemies>() != null)
                 {
-                    theClick.goElseWhere = true;
-                    enemyFound = hitInfo.transform.gameObject;
-                    if (enemyFound != null)
+                    targetFound = hitInfo.point;
+                    engage = true;
+                    /*if (enemyFound != null)
                     {
                         engage = true;
                     }
                     else
                     {
                         engage = false;
-                    }
+                    }*/
                 }
             }
         }
@@ -95,13 +95,9 @@ namespace Selection
                 {
                     engage = false;
                     mNav.SetDestination(hitInfo.transform.position);
-                    Arrived();
+                    mNav.ResetPath();
                 }
             }
-        }
-        public void Arrived()
-        {
-            mNav.ResetPath();
         }
     }
 }

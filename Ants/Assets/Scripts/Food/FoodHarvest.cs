@@ -10,9 +10,9 @@ namespace Selection
     {
         bool harvest = false, harvestCoolDown = true;
         SelectableUnit ifSelected;
-        float extractionWood=150;
-        float extractionFood=200;
-        float extractionStone=100;
+        float extractionWood;
+        float extractionFood;
+        float extractionStone;
 
         NavMeshAgent mNav;
         GameObject resourceFound;
@@ -29,6 +29,25 @@ namespace Selection
             theClick = GetComponent<ClickToMove>();
             mCuerpo = GetComponent<Rigidbody>();
             eating = GameObject.Find("Eating").GetComponent<AudioSource>();
+            if (DifficultController.difficult == 0)
+            {
+                extractionWood = 250f;
+                extractionFood = 300f;
+                extractionStone = 250f;
+            }
+            if (DifficultController.difficult == 1)
+            {
+                extractionWood = 150f;
+                extractionFood = 150f;
+                extractionStone = 200f;
+            }
+            if (DifficultController.difficult == 2)
+            {
+                extractionWood = 50f;
+                extractionStone = 25;
+                extractionFood = 100f;
+            }
+
         }
 
         void Update()
@@ -39,7 +58,6 @@ namespace Selection
             {
                 Harvest();
             }
-            if (!harvest) { theClick.goElseWhere = false; }
             if (harvestCoolDown == false)
             {
                 t += Time.deltaTime;
@@ -141,8 +159,8 @@ namespace Selection
                 RaycastHit hitInfo = new RaycastHit();
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && hitInfo.transform.GetComponent<IExtractResources>() != null)
                 {
+                    print("Click en recurso");
                     resourceFound = hitInfo.transform.gameObject;
-                    theClick.goElseWhere = true;
                     if (resourceFound != null)
                     {
                         harvest = true;
@@ -157,7 +175,7 @@ namespace Selection
         public void Harvest()
         {
             Vector3 resource = transform.position - resourceFound.transform.position;
-            print("I Will Engage");
+            print("I Will Harvest");
             mNav.SetDestination(resourceFound.transform.position);
             if (resource.sqrMagnitude < 5)
             {
@@ -166,9 +184,9 @@ namespace Selection
                 if (harvestCoolDown)
                 {
                     resourceToHarvest.Extractor(extractionWood, extractionFood, extractionStone);
+                    eating.Play();
                     harvestCoolDown = false;
                 }
-
             }
             else
             {
@@ -185,13 +203,8 @@ namespace Selection
                     harvest = false;
                     mNav.ResetPath();
                     mNav.SetDestination(hitInfo.transform.position);
-                    Arrived();
                 }
             }
-        }
-        public void Arrived()
-        {
-            mNav.ResetPath();
         }
     }
 }
