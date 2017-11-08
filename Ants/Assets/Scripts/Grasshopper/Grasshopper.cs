@@ -44,6 +44,19 @@ public class Grasshopper : MonoBehaviour, IEnemies
         playerTransform = player.transform;
         navAgent = GetComponentInParent<NavMeshAgent>();
         speed = 10f;
+
+        if(DifficultController.difficult == 0)
+        {
+            navAgent.speed = 4;
+        }
+        if (DifficultController.difficult == 1)
+        {
+            navAgent.speed = 6;
+        }
+        if (DifficultController.difficult == 2)
+        {
+            navAgent.speed = 10;
+        }
     }
 
     void Update()

@@ -32,7 +32,18 @@ public class FoodHarvest : MonoBehaviour {
 
         if (arrived.gameObject.tag == "Wood")
         {
-            extractionWood = 150f;
+            if (DifficultController.difficult == 0)
+            {
+                extractionWood = 250f;
+            }
+            if (DifficultController.difficult == 1)
+            {
+                extractionWood = 150f;
+            }
+            if (DifficultController.difficult == 2)
+            {
+                extractionWood = 50f;
+            }
 
             if (t > 1f)
             {
@@ -43,7 +54,18 @@ public class FoodHarvest : MonoBehaviour {
 
         if (arrived.gameObject.tag == "Stone")
         {
-            extractionStone = 100f;
+            if (DifficultController.difficult == 0)
+            {
+                extractionStone = 200f;
+            }
+            if (DifficultController.difficult == 1)
+            {
+                extractionStone = 100f;
+            }
+            if (DifficultController.difficult == 2)
+            {
+                extractionStone = 25f;
+            }
 
             if (t > 1f)
             {
@@ -54,7 +76,18 @@ public class FoodHarvest : MonoBehaviour {
 
         if (arrived.gameObject.tag == "Food")
         {
-            extractionFood = 200f;
+            if (DifficultController.difficult == 0)
+            {
+                extractionFood = 300f;
+            }
+            if (DifficultController.difficult == 1)
+            {
+                extractionFood = 200f;
+            }
+            if (DifficultController.difficult == 2)
+            {
+                extractionFood = 100f;
+            }
 
             if (t > 1f)
             {
