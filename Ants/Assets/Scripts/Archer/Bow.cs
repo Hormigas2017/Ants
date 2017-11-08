@@ -8,7 +8,9 @@ public class Bow : MonoBehaviour
     Transform mTransform;
     bool inRange = false;
     float coolDown = 0;
-    float minRange = 20, maxRange = 300, maxMagnitude = 725;
+    float minRange = 20, maxRange = 300;
+
+    float magnitude = 725f;
 
     AudioSource shotSound;
 
@@ -35,7 +37,7 @@ public class Bow : MonoBehaviour
 
     public void ShootCondition(Transform enemyTransform)
     {
-        Vector3 heading = enemyTransform.position - mTransform.position;// Gets a vector that points from the player's position to the target's.
+        Vector3 heading = enemyTransform.position - mTransform.position;
 
         if (heading.sqrMagnitude < maxRange && heading.sqrMagnitude > minRange)
         {
@@ -59,9 +61,6 @@ public class Bow : MonoBehaviour
             Vector3 heading = enemyTransform.position - mTransform.position;
             float distance = heading.magnitude;
             Vector3 direction = heading / distance; // This is now the normalized direction.
-            Vector3 par = new Vector3(0, 0.4f, 0);
-
-            float magnitude = maxMagnitude * distance;
 
             if (inRange == true && coolDown >= 2 && enemy.activeInHierarchy == true)
             {
@@ -72,7 +71,7 @@ public class Bow : MonoBehaviour
 
                 Rigidbody rArrow = arrow.GetComponent<Rigidbody>();
 
-                rArrow.AddForce(magnitude * (direction + par));
+                rArrow.AddForce(direction * magnitude);
 
                 Arrow mArrow = arrow.GetComponent<Arrow>();
                 mArrow.shot = true;

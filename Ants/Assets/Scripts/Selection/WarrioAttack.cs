@@ -30,7 +30,6 @@ namespace Selection
             {
                 Engage();
             }
-            if (!engage) { theClick.goElseWhere = false; }
             else
             {
                 mNav.ResetPath();

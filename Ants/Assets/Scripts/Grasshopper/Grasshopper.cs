@@ -11,14 +11,14 @@ public class Grasshopper : MonoBehaviour, IEnemies
     Transform mTransform;
     Vector3 initialPosition;
     Rigidbody mBody;
-    GameObject player;
-    Transform playerTransform;
     float minDist = 2.0f;
     bool attackCooldown = true;
     float t = 0.0f;
     float cooldownTime = 3f;
     float damage = 10.0f;
-    float time = 0;
+    string enemyTag = "Player";
+    GameObject enemy;
+    Transform enemyTransform;
 
     public delegate void DieGH();
     public static event DieGH OnDieGrasshopper;
@@ -26,10 +26,18 @@ public class Grasshopper : MonoBehaviour, IEnemies
     NavMeshAgent navAgent;
     public LayerMask layerMask;
 
+    [SerializeField]
     bool attack;
-    float speed;
-    bool rotTime;
-    float y;
+
+    [SerializeField]
+    Vector3 targetPos;
+
+    float wanderRadius = 30f;
+    float wanderTimer = 5f;
+
+    private Transform target;
+    private NavMeshAgent agent;
+    private float timer;
 
     int deadGH = 0;
 
@@ -40,10 +48,7 @@ public class Grasshopper : MonoBehaviour, IEnemies
         lifeSlider.value = 100f;
         initialPosition = mTransform.position;
         mBody = GetComponent<Rigidbody>();
-        player = GameObject.Find("Player");
-        playerTransform = player.transform;
-        navAgent = GetComponentInParent<NavMeshAgent>();
-        speed = 10f;
+        navAgent = GetComponent<NavMeshAgent>();
 
         if(DifficultController.difficult == 0)
         {
@@ -57,6 +62,8 @@ public class Grasshopper : MonoBehaviour, IEnemies
         {
             navAgent.speed = 10;
         }
+
+        targetPos = RandomNavSphere(transform.position, 20f, 8);
     }
 
     void Update()
@@ -89,16 +96,20 @@ public class Grasshopper : MonoBehaviour, IEnemies
 
     private void FixedUpdate()
     {
-        time++;
+        timer += Time.deltaTime;
 
         if(!attack)
         {
-            navAgent.enabled = false;
-            Idle();
+            if (timer >= wanderTimer)
+            {
+                Vector3 newPos = RandomNavSphere(transform.position, wanderRadius, -1);
+                navAgent.SetDestination(newPos);
+                timer = 0;
+            }
         }
+
         if(attack)
         {
-            navAgent.enabled = true;
             Attack();
         }
     }
@@ -110,46 +121,23 @@ public class Grasshopper : MonoBehaviour, IEnemies
 
     void MeleeAttack()
     {
-        if (player.GetComponent<IAnts>() != null)
+        if (enemy.GetComponent<IAnts>() != null)
         {
-            IAnts iAnts = player.GetComponent<IAnts>();
+            IAnts iAnts = enemy.GetComponent<IAnts>();
             iAnts.Damage(damage);
         }
     }
 
-    void Idle()
-    {
-        transform.Translate(Vector3.forward * speed * Time.fixedDeltaTime);
-        transform.Rotate(new Vector3(0, y, 0));
-        if(time >= Random.Range(100, 2500))
-        {
-            Rotate();
-            time = 0;
-            rotTime = true;
-        }
-
-        if(rotTime)
-        {
-            if(time >= Random.Range(10, 30))
-            {
-                y = 0;
-                rotTime = false;
-            }
-        }
-    }
-
-    void Rotate()
-    {
-        y = Random.Range(-5, 5);
-    }
-
     void Attack()
     {
-        navAgent.SetDestination(playerTransform.position);
+        enemy = FindClosestEnemy();
+        enemyTransform = enemy.transform;
 
-        if (player.activeInHierarchy)
+        navAgent.SetDestination(enemyTransform.position);
+
+        if (enemy.activeInHierarchy)
         {
-            if (Vector3.Distance(mTransform.position, playerTransform.position) <= minDist)
+            if (Vector3.Distance(mTransform.position,enemyTransform.position) <= minDist)
             {
                 if (attackCooldown == true)
                 {
@@ -159,7 +147,7 @@ public class Grasshopper : MonoBehaviour, IEnemies
                 }
             }
         }
-        if (Vector3.Distance(playerTransform.position, transform.position) > 100)
+        if (Vector3.Distance(enemyTransform.position, transform.position) > 100)
         {
             attack = false;
             navAgent.isStopped = true;
@@ -171,17 +159,48 @@ public class Grasshopper : MonoBehaviour, IEnemies
         if(other.tag == "Player")
         {
             attack = true;
-            navAgent.enabled = true;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player")
+        if(other.tag == "Player")
         {
             attack = false;
-            navAgent.enabled = false;
         }
+    }
+
+    private GameObject FindClosestEnemy()
+    {
+        GameObject[] enemies;
+        enemies = GameObject.FindGameObjectsWithTag(enemyTag);
+        GameObject closest = null;
+        float distance = Mathf.Infinity;
+        Vector3 position = mTransform.position;
+        foreach (GameObject enemy in enemies)
+        {
+            Vector3 difference = enemy.transform.position - mTransform.position;
+            float currentDistance = difference.sqrMagnitude;
+            if (currentDistance < distance)
+            {
+                closest = enemy;
+                distance = currentDistance;
+            }
+        }
+        return closest;
+    }
+
+    public static Vector3 RandomNavSphere(Vector3 origin, float distance, int layermask)
+    {
+        Vector3 randomDirection = Random.insideUnitSphere * distance;
+
+        randomDirection += origin;
+
+        NavMeshHit navHit;
+
+        NavMesh.SamplePosition(randomDirection, out navHit, distance, layermask);
+
+        return navHit.position;
     }
 }
     

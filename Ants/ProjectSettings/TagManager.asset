@@ -12,6 +12,7 @@ TagManager:
   - Wood
   - Food
   - Stone
+  - Grasshopper
   layers:
   - Default
   - TransparentFX

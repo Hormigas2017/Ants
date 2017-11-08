@@ -17,7 +17,6 @@ namespace Selection
         public Vector3 targetPos;
         public LayerMask groundLayer; // capa del suelo;
         private SelectableUnit selectable;
-        public bool goElseWhere = false;
 
         public delegate void TutorialMoveUnit();
         public static event TutorialMoveUnit OnMoveUnitTutorial;
