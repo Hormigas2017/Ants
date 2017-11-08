@@ -1,110 +1,197 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class FoodHarvest : MonoBehaviour {
+namespace Selection
+{
 
-    float extractionWood;
-    float extractionFood;
-    float extractionStone;
-
-    Rigidbody mCuerpo;
-    AudioSource eating;
-
-    float t = 0f;
-
-	void Start ()
+    public class FoodHarvest : MonoBehaviour
     {
-        mCuerpo = GetComponent<Rigidbody>();
-        eating = GameObject.Find("Eating").GetComponent<AudioSource>();
-	}
-	
-	void Update ()
-    {
-        mCuerpo.WakeUp();
-    }
+        bool harvest = false, harvestCoolDown = true;
+        SelectableUnit ifSelected;
+        float extractionWood=150;
+        float extractionFood=200;
+        float extractionStone=100;
 
-    private void OnCollisionStay(Collision pCollision)
-    {
-        GameObject arrived = pCollision.gameObject;
+        NavMeshAgent mNav;
+        GameObject resourceFound;
+        Rigidbody mCuerpo;
+        AudioSource eating;
+        ClickToMove theClick;
 
-        t += Time.deltaTime;
+        float t = 0f;
 
-        if (arrived.gameObject.tag == "Wood")
+        void Start()
         {
-            if (DifficultController.difficult == 0)
-            {
-                extractionWood = 250f;
-            }
-            if (DifficultController.difficult == 1)
-            {
-                extractionWood = 150f;
-            }
-            if (DifficultController.difficult == 2)
-            {
-                extractionWood = 50f;
-            }
+            mNav = GetComponent<NavMeshAgent>();
+            ifSelected = GetComponent<SelectableUnit>();
+            theClick = GetComponent<ClickToMove>();
+            mCuerpo = GetComponent<Rigidbody>();
+            eating = GameObject.Find("Eating").GetComponent<AudioSource>();
+        }
 
-            if (t > 1f)
+        void Update()
+        {
+            StartExtract();
+            mCuerpo.WakeUp();
+            if (harvest)
             {
-                eating.Play();
-                t = 0;
+                Harvest();
+            }
+            if (!harvest) { theClick.goElseWhere = false; }
+            if (harvestCoolDown == false)
+            {
+                t += Time.deltaTime;
+                if (t >= 2f)
+                {
+                    harvestCoolDown = true;
+                    t = 0;
+                }
             }
         }
 
-        if (arrived.gameObject.tag == "Stone")
+        /*private void OnCollisionStay(Collision pCollision)
         {
-            if (DifficultController.difficult == 0)
+            GameObject arrived = pCollision.gameObject;
+
+            t += Time.deltaTime;
+
+            if (arrived.gameObject.tag == "Wood")
             {
-                extractionStone = 200f;
-            }
-            if (DifficultController.difficult == 1)
-            {
-                extractionStone = 100f;
-            }
-            if (DifficultController.difficult == 2)
-            {
-                extractionStone = 25f;
+                if (DifficultController.difficult == 0)
+                {
+                    extractionWood = 250f;
+                }
+                if (DifficultController.difficult == 1)
+                {
+                    extractionWood = 150f;
+                }
+                if (DifficultController.difficult == 2)
+                {
+                    extractionWood = 50f;
+                }
+
+                if (t > 1f)
+                {
+                    eating.Play();
+                    t = 0;
+                }
             }
 
-            if (t > 1f)
+            if (arrived.gameObject.tag == "Stone")
             {
-                eating.Play();
-                t = 0;
+                if (DifficultController.difficult == 0)
+                {
+                    extractionStone = 200f;
+                }
+                if (DifficultController.difficult == 1)
+                {
+                    extractionStone = 100f;
+                }
+                if (DifficultController.difficult == 2)
+                {
+                    extractionStone = 25f;
+                }
+
+                if (t > 1f)
+                {
+                    eating.Play();
+                    t = 0;
+                }
+            }
+
+            if (arrived.gameObject.tag == "Food")
+            {
+                if (DifficultController.difficult == 0)
+                {
+                    extractionFood = 300f;
+                }
+                if (DifficultController.difficult == 1)
+                {
+                    extractionFood = 200f;
+                }
+                if (DifficultController.difficult == 2)
+                {
+                    extractionFood = 100f;
+                }
+
+                if (t > 1f)
+                {
+                    eating.Play();
+                    t = 0;
+                }
+            }
+
+            if (arrived.GetComponent<IExtractResources>() != null)
+            {
+                IExtractResources resourcesInterface = arrived.GetComponent<IExtractResources>();
+                resourcesInterface.Extractor(extractionWood, extractionFood, extractionStone);
+            }
+        }*/
+
+        /*private void OnCollisionExit(Collision collision)
+        {
+            eating.Stop();
+        }*/
+        public void StartExtract()
+        {
+            if (Input.GetMouseButtonDown(1) && ifSelected.IsSelected())
+            {
+                RaycastHit hitInfo = new RaycastHit();
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && hitInfo.transform.GetComponent<IExtractResources>() != null)
+                {
+                    resourceFound = hitInfo.transform.gameObject;
+                    theClick.goElseWhere = true;
+                    if (resourceFound != null)
+                    {
+                        harvest = true;
+                    }
+                    else
+                    {
+                        harvest = false;
+                    }
+                }
             }
         }
-
-        if (arrived.gameObject.tag == "Food")
+        public void Harvest()
         {
-            if (DifficultController.difficult == 0)
+            Vector3 resource = transform.position - resourceFound.transform.position;
+            print("I Will Engage");
+            mNav.SetDestination(resourceFound.transform.position);
+            if (resource.sqrMagnitude < 5)
             {
-                extractionFood = 300f;
-            }
-            if (DifficultController.difficult == 1)
-            {
-                extractionFood = 200f;
-            }
-            if (DifficultController.difficult == 2)
-            {
-                extractionFood = 100f;
-            }
+                mNav.ResetPath();
+                IExtractResources resourceToHarvest = resourceFound.GetComponent<IExtractResources>();
+                if (harvestCoolDown)
+                {
+                    resourceToHarvest.Extractor(extractionWood, extractionFood, extractionStone);
+                    harvestCoolDown = false;
+                }
 
-            if (t > 1f)
+            }
+            else
             {
-                eating.Play();
-                t = 0;
+                mNav.SetDestination(resourceFound.transform.position);
             }
         }
-
-        if (arrived.GetComponent<IExtractResources>() != null)
+        public void DisHarvest()
         {
-            IExtractResources resourcesInterface = arrived.GetComponent<IExtractResources>();
-            resourcesInterface.Extractor(extractionWood,extractionFood,extractionStone);
+            if (Input.GetMouseButtonDown(1) && ifSelected.IsSelected() && harvest == true)
+            {
+                RaycastHit hitInfo = new RaycastHit();
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && hitInfo.transform.GetComponent<IEnemies>() == null)
+                {
+                    harvest = false;
+                    mNav.ResetPath();
+                    mNav.SetDestination(hitInfo.transform.position);
+                    Arrived();
+                }
+            }
         }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        eating.Stop();
+        public void Arrived()
+        {
+            mNav.ResetPath();
+        }
     }
 }

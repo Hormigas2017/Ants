@@ -8,6 +8,8 @@ namespace Selection
 {
     public class ClickToMove : MonoBehaviour
     {
+        WarrioAttack theWarrior;
+        FoodHarvest harvest;
         private NavMeshAgent navAgent;
         //private Animator anim;
         [SerializeField]
@@ -15,6 +17,7 @@ namespace Selection
         public Vector3 targetPos;
         public LayerMask groundLayer; // capa del suelo;
         private SelectableUnit selectable;
+        public bool goElseWhere = false;
 
         public delegate void TutorialMoveUnit();
         public static event TutorialMoveUnit OnMoveUnitTutorial;
@@ -25,10 +28,11 @@ namespace Selection
 
         private void Awake()
         {
+            harvest = GetComponent<FoodHarvest>();
             navAgent = GetComponent<NavMeshAgent>();
             //anim = GetComponentInChildren<Animator>();
             selectable = GetComponent<SelectableUnit>();
-
+            theWarrior = GetComponent<WarrioAttack>();
             mScene = SceneManager.GetActiveScene();
         }
 
@@ -37,12 +41,12 @@ namespace Selection
             //anim.SetFloat("velocity", navAgent.velocity.sqrMagnitude);
 
             //trace.SetPosition(0, transform.position);
-
-            if (Input.GetButtonDown("Fire2") && selectable.IsSelected())
-            {
-                MoveTowardsClick();
+            if (!goElseWhere) {
+                if (Input.GetButtonDown("Fire2") && selectable.IsSelected())
+                {
+                    MoveTowardsClick();
+                }
             }
-
             if (selectable.IsSelected())
             {
                 if (navAgent.remainingDistance <= navAgent.stoppingDistance)
